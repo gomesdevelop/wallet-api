@@ -1,21 +1,21 @@
 
-using Application.UseCases.AddCustomer;
-using Domain.Contracts.Repositories.AddCustomer;
-using Domain.Contracts.UseCases.AddCustomer;
+using Application.UseCases.AddTransaction;
+using Domain.Contracts.Repositories.AddTransaction;
+using Domain.Contracts.UseCases.AddTransaction;
 using FluentValidation;
 using Infrastructure.Contexts;
-using Infrastructure.Respositories.AddCustomer;
+using Infrastructure.Respositories.AddTransaction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebApi.Configurations;
-using WebApi.Models.AddCustomer;
+using WebApi.Models.AddTransaction;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IDbContext, DbContext>();
-builder.Services.AddScoped<IAddCustomerRepository, AddCustomerRepository>();
-builder.Services.AddScoped<IAddCustomerUseCase, AddCustomerUseCase>();
-builder.Services.AddTransient<IValidator<AddCustomerInput>, AddCustomerInputValidator>();
+builder.Services.AddScoped<IAddTransactionRepository, AddTransactionRepository>();
+builder.Services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
+builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInputValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
