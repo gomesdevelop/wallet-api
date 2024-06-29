@@ -12,6 +12,18 @@ namespace Domain.Entities
     public double Amount { get; set; } = 0;
     public TransactionType TransactionType { get; set; } = TransactionType.Debit;
 
+    public Transaction() { }
+
+    public Transaction(Guid id, Guid userId, String description, DateTime dueDate, double amount, TransactionType transactionType)
+    {
+      Id = id;
+      UserId = userId;
+      Description = description;
+      DueDate = dueDate;
+      Amount = amount;
+      TransactionType = transactionType;
+    }
+
     public Transaction(Guid userId, String description, DateTime dueDate, double amount, TransactionType transactionType)
     {
       UserId = userId;

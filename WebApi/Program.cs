@@ -1,10 +1,11 @@
 
 using Application.UseCases.AddTransaction;
-using Domain.Contracts.Repositories.AddTransaction;
+using Domain.Contracts;
+using Domain.Contracts.Repositories;
 using Domain.Contracts.UseCases.AddTransaction;
 using FluentValidation;
 using Infrastructure.Contexts;
-using Infrastructure.Respositories.AddTransaction;
+using Infrastructure.Respositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Configurations;
@@ -14,8 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<WalletContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DigitalAccount")));
-builder.Services.AddScoped<IAddTransactionRepository, AddTransactionRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
+builder.Services.AddScoped<IGetTransactionsUseCase, Application.GetTransactionsUseCase>();
 builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInputValidator>();
 
 builder.Services.AddControllers();
@@ -38,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
