@@ -6,13 +6,14 @@ using FluentValidation;
 using Infrastructure.Contexts;
 using Infrastructure.Respositories.AddTransaction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Configurations;
 using WebApi.Models.AddTransaction;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<IDbContext, DbContext>();
+builder.Services.AddDbContext<WalletContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DigitalAccount")));
 builder.Services.AddScoped<IAddTransactionRepository, AddTransactionRepository>();
 builder.Services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
 builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInputValidator>();

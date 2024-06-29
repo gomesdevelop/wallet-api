@@ -7,26 +7,25 @@ namespace Infrastructure.Respositories.AddTransaction
 {
   public class AddTransactionRepository : IAddTransactionRepository
   {
-    private readonly IDbContext _dbContext;
+    private readonly WalletContext _context;
 
-    public AddTransactionRepository(IDbContext dbContext)
+    public AddTransactionRepository(WalletContext context)
     {
-      _dbContext = dbContext;
+      _context = context;
     }
 
-    public void Add(Transaction transactions)
+    public void Add(Transaction transaction)
     {
-      var query = $"INSERT INTO transactions (user_id, description, due_date, amount, transaction_type) VALUES (@userId, @description, @dueDate, @amount, @transactionType);";
-      var parameters = new DynamicParameters();
+      var model = new TransactionModel(
+        transaction.UserId,
+        transaction.Description,
+        transaction.DueDate,
+        transaction.Amount,
+        transaction.TransactionType
+      );
 
-      parameters.Add("userId", transactions.UserId, System.Data.DbType.Guid);
-      parameters.Add("description", transactions.Description, System.Data.DbType.String);
-      parameters.Add("dueDate", transactions.DueDate, System.Data.DbType.DateTime);
-      parameters.Add("amount", transactions.Amount, System.Data.DbType.Double);
-      parameters.Add("transactionType", transactions.TransactionType, System.Data.DbType.Int32);
-
-      using var connection = _dbContext.CreateConnection();
-      connection.Execute(query, parameters);
+      _context.Transactions.Add(model);
+      _context.SaveChanges();
     }
   }
 }
