@@ -50,9 +50,9 @@ app.UseHttpsRedirection();
 app.UseCors(policy =>
 {
     policy
-      .AllowAnyOrigin()
-      .AllowAnyMethod()
-      .AllowAnyHeader();
+      .AllowAnyOrigin().WithOrigins("*")
+      .AllowAnyMethod().WithMethods("*")
+      .AllowAnyHeader().WithHeaders("*");
 });
 #endregion
 
