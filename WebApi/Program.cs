@@ -13,6 +13,8 @@ using WebApi.Models.AddTransaction;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var apiCorsPolicy = "AllowAll";
+
 // Add services to the container.
 builder.Services.AddDbContext<WalletContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DigitalAccount")));
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -22,7 +24,7 @@ builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInp
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddPolicy(apiCorsPolicy,
         builder =>
         {
             builder
@@ -52,9 +54,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(apiCorsPolicy);
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
