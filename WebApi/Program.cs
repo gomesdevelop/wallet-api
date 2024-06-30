@@ -13,26 +13,12 @@ using WebApi.Models.AddTransaction;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var apiCorsPolicy = "AllowAll";
-
 // Add services to the container.
 builder.Services.AddDbContext<WalletContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DigitalAccount")));
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
 builder.Services.AddScoped<IGetTransactionsUseCase, Application.GetTransactionsUseCase>();
 builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInputValidator>();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(apiCorsPolicy,
-        builder =>
-        {
-            builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
-});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -44,6 +30,11 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 
+#region [CORS]
+builder.Services.AddCors();
+#endregion
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -54,7 +45,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(apiCorsPolicy);
+
+#region [CORS]
+app.UseCors(policy =>
+{
+    policy
+      .AllowAnyOrigin()
+      .AllowAnyMethod()
+      .AllowAnyHeader();
+});
+#endregion
 
 app.UseAuthentication();
 app.UseAuthorization();
