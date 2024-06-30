@@ -20,6 +20,18 @@ builder.Services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
 builder.Services.AddScoped<IGetTransactionsUseCase, Application.GetTransactionsUseCase>();
 builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInputValidator>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
