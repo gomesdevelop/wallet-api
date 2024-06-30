@@ -52,7 +52,8 @@ app.UseCors(policy =>
     policy
       .AllowAnyOrigin()
       .AllowAnyMethod()
-      .AllowAnyHeader();
+      .AllowAnyHeader()
+      .AllowCredentials();
 });
 #endregion
 
