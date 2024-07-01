@@ -20,7 +20,11 @@ builder.Services.AddScoped<IAddTransactionUseCase, AddTransactionUseCase>();
 builder.Services.AddScoped<IGetTransactionsUseCase, Application.GetTransactionsUseCase>();
 builder.Services.AddTransient<IValidator<AddTransactionInput>, AddTransactionInputValidator>();
 
+#region [CORS]
+builder.Services.AddCors();
+#endregion
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(AddSwaggerGenConfiguration.config);
@@ -29,11 +33,6 @@ builder.Services.ConfigureOptions<JwtBearerConfigureOptions>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
-
-#region [CORS]
-builder.Services.AddCors();
-#endregion
-
 
 var app = builder.Build();
 
